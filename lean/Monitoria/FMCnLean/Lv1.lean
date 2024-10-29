@@ -80,21 +80,28 @@ def fact : Nat → Nat
 
 -- Min binario
 def min : Nat → Nat → Nat
-  | _, O => O
-  | O, _ => O
   | S n, S m => S (min n m)
+  | _, _ => O
 
 #eval min (S (S O)) O
 #eval min (S O) (S (S O))
 
 -- Max binario
 def max : Nat → Nat → Nat
+  | O, n => n
   | n, O => n
-  | O, m => m
   | S n, S m => S (max n m)
 
 #eval max (S (S O)) O
+#eval max O (S (S O))
 #eval max (S O) (S (S O))
+
+def toRootNat : Nat → _root_.Nat
+  | O => 0
+  | S n => 1 + toRootNat n
+
+#eval toRootNat O
+#eval toRootNat (S O)
 
                       /- Pergunta qualquer duvida sobre as defs -/
 
@@ -125,12 +132,13 @@ by
   repeat rw[mul]
   rw[add]
 
-theorem symm_max :
+  theorem max_id_O :
   ∃(e : Nat), ∀(n : Nat), max n e = n ∧ max e n = n :=
 by
   exists O
   intro n
   apply And.intro
-  repeat cases n with
-  | O => rw[max]
-  | S n' => simp[max]
+  cases n with
+    | O => rw[max]
+    | S m => rw[max]; intro h; cases h
+  rw[max]
