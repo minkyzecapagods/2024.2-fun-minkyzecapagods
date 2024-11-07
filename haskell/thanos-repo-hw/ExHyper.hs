@@ -24,19 +24,10 @@ instance (Ord Nat) where
     (S n) <= O     = False
     (S n) <= (S m) = n <= m
 
--- explicit definitions of add, mul, exp:
 
-add n O     = n
-add n (S m) = S (add m n)
-
-mul n O     = O
-mul n (S m) = add (mul n m) n
-
-exp n O     = S O
-exp n (S m) = mul (exp n m) n
-
-
-
+toInt :: Nat -> Int
+toInt O = 0
+toInt (S n) = 1 + (toInt n)
 ------------------------------------------------
 
 -- substitute 'undefined' by the correct number
@@ -54,10 +45,21 @@ exp = hyper 3
 -- hyper n should return the n'th operation in the sequence:
 -- (..?..), add, mul, exp, ...?
 
-hyper :: Integral i => i -> (Nat -> Nat -> Nat)
-hyper n
-    | n == 1 = add
-    | n == 2 = mul
-    | n == 3 = exp
-    | otherwise = error "hyper: no operation for this index"
+fold :: Num a => a -> (a -> a -> a) -> [a] -> a
+fold i _ [] = i
+fold i b (n : ns) = b n (fold i b ns)
 
+repetir :: Nat -> Nat -> (Nat -> Nat -> Nat) -> Nat
+repetir O _ _ = O
+repetir (S n) m op = op m (repetir n m op)
+
+prd :: Nat -> Nat
+prd (S n) = n
+prd _ = O
+
+hyper :: Integral i => i -> (Nat -> Nat -> Nat)
+hyper 0 = \x -> \y -> S y
+hyper n = \x -> \y -> if y > 0 then hyper (n-1) x (hyper n x (prd y))
+                  else if n == 1 then x
+                  else if n == 2 then O
+                  else S O 

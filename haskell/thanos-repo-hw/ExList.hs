@@ -176,6 +176,8 @@ infixl 5 +++
 palindrome :: String -> Bool
 palindrome = undefined
 
+fold
+
 {-
 
 Examples of palindromes:
