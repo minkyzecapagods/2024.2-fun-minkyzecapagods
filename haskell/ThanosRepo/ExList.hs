@@ -174,10 +174,10 @@ innits l@(_:ls) = ini : innits ini
                   where ini = innit l
 
 -- subsequences
-subsequences :: [a] -> [[a]]
+{--subsequences :: [a] -> [[a]]
 subsequences [] = []
 subsequences (n:ns)
-
+--}
 -- any
 -- all
 
