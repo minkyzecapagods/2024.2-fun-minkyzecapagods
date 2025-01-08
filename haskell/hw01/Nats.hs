@@ -130,3 +130,4 @@ gcd (n, m) = gcd (m, res (n, m))
 lcm :: (Nat, Nat) -> Nat
 lcm (n, m) = quoc (mult (n, m), gcd (n, m))
 
+
